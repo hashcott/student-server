@@ -3,6 +3,8 @@ const router = express.Router();
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const Student = require("../models/Student");
+const TimeTable = require("../models/TimeTable");
+
 const api = require("../api");
 
 router.post("/", async (req, res) => {
@@ -15,6 +17,14 @@ router.post("/", async (req, res) => {
   if (student) {
     const validatePass = await bcrypt.compare(password, student.password);
     if (!validatePass) res.status(400).send("Invalid email or password.");
+    const timeTable = await TimeTable.findOne({ student: student._id });
+    await api.login({ idUser: id, passwordUser: password });
+    const term = await api.studyRegister();
+    if (timeTable.term != term) {
+      timeTable.term = term;
+      timeTable.timeTable = api.timeLineByDay;
+      timeTable.save();
+    }
     const token = student.generateAuthToken();
     res.send(token);
   } else {
@@ -26,6 +36,14 @@ router.post("/", async (req, res) => {
     const newStudent = new Student(api.user);
     const token = newStudent.generateAuthToken();
     await newStudent.save();
+    const term = await api.studyRegister();
+    let timeTable = api.timeLineByDay;
+    const newTimeTable = new TimeTable({
+      term,
+      timeTable,
+      student: newStudent._id,
+    });
+    await newTimeTable.save();
     res.send(token);
   }
 });

@@ -14,7 +14,7 @@
     "lodash": "^4.17.20",
     "mongoose": "^5.10.2",
     "morgan": "^1.10.0",
-    "student-api": "^1.2.2"
+    "student-api": "^1.2.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
