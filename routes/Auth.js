@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
     await api.login({ idUser: id, passwordUser: password });
     const isLogin = await api.isAuthenticated;
     if (!isLogin) {
-      res.send("Invalid email or password.");
+      res.status(400).send("Invalid email or password.");
     }
     const newStudent = new Student(api.user);
     const token = newStudent.generateAuthToken();

@@ -25,9 +25,10 @@ studentSchema.methods.generateAuthToken = function () {
   );
   return token;
 };
-studentSchema.pre("save", async function () {
+studentSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash(this.password, salt);
   this.password = password;
+  next();
 });
 module.exports = mongoose.model("Student", studentSchema);
