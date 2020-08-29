@@ -18,8 +18,12 @@ const studentSchema = new mongoose.Schema({
   },
 });
 
-studentSchema.method.generateAuthToken = function () {
-  const token = jwt.sign({ name: this.name, id: this.id });
+studentSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    { name: this.name, id: this.id },
+    config.get("jwtPrivateKey")
+  );
+  return token;
 };
 studentSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
