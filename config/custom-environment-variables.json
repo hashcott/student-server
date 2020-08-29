@@ -1,3 +1,4 @@
 {
-  "jwtPrivateKey": "2ksoft_jwtPrivateKey"
+  "jwtPrivateKey": "2ksoft_jwtPrivateKey",
+  "db": "2ksoft_DB"
 }
